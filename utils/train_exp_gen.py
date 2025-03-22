@@ -10,6 +10,7 @@ def gen_train_exp_pool(df, pickle_save_path='exp_pool_l4s_train.pkl', train_exp_
     """
     exp_pool = ExperiencePool()
     prev_action = None
+    print("len(df)", len(df))
 
     for index, row in df.iterrows():
         state = np.array(row[columns_to_use], dtype=np.float32)
@@ -20,6 +21,7 @@ def gen_train_exp_pool(df, pickle_save_path='exp_pool_l4s_train.pkl', train_exp_
             end_index = index
             selected_rows = df.iloc[start_index:end_index]
             for _, selected_row in selected_rows.iterrows():
+                print("selected_row", selected_row)
                 state = np.array(selected_row[columns_to_use], dtype=np.float32)
                 cal_reward = float((selected_row['packet_length']/ (1024 * 1034)) * 8) /  (float((selected_row['current_queue_delay']/(1000*1000)) + 0.00001))
                 exp_pool.add(state=state, action=selected_row['dequeue_action'], reward=cal_reward, done=0)
